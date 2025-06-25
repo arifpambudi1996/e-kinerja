@@ -23,7 +23,7 @@
   const today = new Date();
   today.setHours(0, 0, 0, 0); // normalisasi jam 00:00
 
-  const start = new Date(today.getFullYear(), 0, 1); // 1 Januari
+  const start = new Date(today.getFullYear(), today.getMonth(), 1); // Awal bulan ini
 
   for (let i = 0; ; i++) {
     const d = new Date(start);

@@ -18,12 +18,12 @@
   form.innerHTML = isi;
   document.body.appendChild(form);
 
-  // Generate tanggal Senin–Jumat 30 hari terakhir
+  // Generate tanggal Senin–Jumat s.d Hari ini
   const sel = document.getElementById("ek-tanggal");
   const today = new Date();
-  for (let i = 0; i < 45; i++) {
-    const d = new Date();
-    d.setDate(today.getDate() - i);
+  const start = new Date(today.getFullYear(), 0, 1); // Awal tahun ini
+  
+  for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
     const day = d.getDay();
     if (day >= 1 && day <= 5) {
       const val = d.toISOString().split('T')[0];
@@ -33,6 +33,7 @@
       sel.appendChild(opt);
     }
   }
+
 
   // Tombol kirim
   document.getElementById("ek-kirim").onclick = () => {

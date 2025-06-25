@@ -9,44 +9,45 @@
   const isi = `
     <h3 style='margin-top:0;'>Apel Pagi e-Kinerja</h3>
     <label>Pilih tanggal (Senin–Jumat):<br/>
-      <select id=\"ek-tanggal\" multiple size=\"8\" style=\"width:100%;margin-top:5px\"></select>
+      <select id="ek-tanggal" multiple size="10" style="width:100%;margin-top:5px"></select>
     </label><br/>
-    <button id=\"ek-kirim\">Kirim</button>
-    <button onclick=\"document.getElementById('ek-form').remove()\">Tutup</button>
-    <pre id=\"ek-log\" style=\"background:#f9f9f9;padding:8px;margin-top:10px;height:150px;overflow:auto;font-size:12px\"></pre>
+    <button id="ek-kirim">Kirim Semua</button>
+    <button onclick="document.getElementById('ek-form').remove()">Tutup</button>
+    <pre id="ek-log" style="background:#f9f9f9;padding:8px;margin-top:10px;height:150px;overflow:auto;font-size:12px"></pre>
   `;
   form.innerHTML = isi;
   document.body.appendChild(form);
 
-  // Generate tanggal Senin–Jumat s.d Hari ini
+  // ✅ Isi dropdown semua hari kerja dari 1 Januari hingga hari ini
   const sel = document.getElementById("ek-tanggal");
   const today = new Date();
-  const start = new Date(today.getFullYear(), 0, 1); // Awal tahun ini
-  
+  today.setHours(0, 0, 0, 0); // normalisasi jam 00:00
+
+  const start = new Date(today.getFullYear(), 0, 1); // 1 Januari
+
   for (let i = 0; ; i++) {
-  const d = new Date(start);
-  d.setDate(d.getDate() + i);
-  if (d > today) break;
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    if (d > today) break;
 
-  const day = d.getDay();
-  if (day >= 1 && day <= 5) {
-    const val = d.toISOString().split('T')[0];
-    const opt = document.createElement("option");
-    opt.value = val;
-    opt.textContent = `${val} (${namaHari[day]})`;
-    sel.appendChild(opt);
+    const day = d.getDay();
+    if (day >= 1 && day <= 5) {
+      const val = d.toISOString().split('T')[0];
+      const opt = document.createElement("option");
+      opt.value = val;
+      opt.textContent = `${val} (${namaHari[day]})`;
+      sel.appendChild(opt);
+    }
   }
-}
 
-
-  // Tombol kirim
+  // 🧠 Tombol Kirim
   document.getElementById("ek-kirim").onclick = () => {
     const log = document.getElementById("ek-log");
     log.textContent = "";
-    const tanggalTerpilih = Array.from(sel.selectedOptions).map(opt => opt.value);
-    if (tanggalTerpilih.length === 0) return alert("Pilih minimal satu tanggal dulu.");
+    const tanggalList = Array.from(sel.selectedOptions).map(opt => opt.value);
+    if (tanggalList.length === 0) return alert("Pilih minimal satu tanggal terlebih dahulu.");
 
-    tanggalTerpilih.forEach(tgl => {
+    tanggalList.forEach(tgl => {
       const data = {
         tanggal: tgl,
         parent_pekerjaan: "1",
@@ -56,6 +57,7 @@
         uraian_pekerjaan: "Melaksanakan Apel Pagi",
         id_data_kinerja: ""
       };
+
       fetch("https://tukin.kebumenkab.go.id/rekam/saveAktivitas", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

@@ -45,7 +45,7 @@
     const log = document.getElementById("ek-log");
     log.textContent = "";
     const tanggalList = Array.from(sel.selectedOptions).map(opt => opt.value);
-    if (tanggalList.length === 0) return alert("Pilih minimal satu tanggal terlebih dahulu.");
+    if (tanggalList.length === 0) return alert("Pilih minimal satu tanggal terlebih dahulu!!");
 
     tanggalList.forEach(tgl => {
       const data = {

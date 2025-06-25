@@ -23,16 +23,20 @@
   const today = new Date();
   const start = new Date(today.getFullYear(), 0, 1); // Awal tahun ini
   
-  for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
-    const day = d.getDay();
-    if (day >= 1 && day <= 5) {
-      const val = d.toISOString().split('T')[0];
-      const opt = document.createElement("option");
-      opt.value = val;
-      opt.textContent = `${val} (${namaHari[day]})`;
-      sel.appendChild(opt);
-    }
+  for (let i = 0; ; i++) {
+  const d = new Date(start);
+  d.setDate(d.getDate() + i);
+  if (d > today) break;
+
+  const day = d.getDay();
+  if (day >= 1 && day <= 5) {
+    const val = d.toISOString().split('T')[0];
+    const opt = document.createElement("option");
+    opt.value = val;
+    opt.textContent = `${val} (${namaHari[day]})`;
+    sel.appendChild(opt);
   }
+}
 
 
   // Tombol kirim
